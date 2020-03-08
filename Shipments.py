@@ -82,7 +82,8 @@ class Shipment:
             MAWB = ?,
             HAWB = ?
             WHERE on_hand_number = ?
-            ''', (datetime.datetime.today().strftime('%Y-%m-%d'), MAWB, HAWB, self.on_hand_number))
+            ''', (datetime.datetime.today().strftime('%Y-%m-%d'),
+             MAWB, HAWB, self.on_hand_number))
         return conn.commit()
 
     def add_to_consolidation(self, MAWB, HAWB):
@@ -135,6 +136,7 @@ class Shipment:
     def view_mawbs():
         curs.execute('SELECT * FROM consols')
         return curs.fetchall()
+
 
 if __name__ == '__main__':
     test = Shipment('TSB', 48, 40, 60, 460, 'Export', 10003)
