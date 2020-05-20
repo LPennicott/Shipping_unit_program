@@ -2,20 +2,22 @@ import datetime, sqlite3
 conn = sqlite3.connect('Shipping_Units (2).db')
 curs = conn.cursor()
 
+
 class Shipment:
     """docstring for Shipment"""
-    def __init__(self, 
-                client, 
-                width, 
-                length, 
-                height, 
-                gross_weight, 
-                purpose, 
-                on_hand_number = None, 
-                create_date = datetime.datetime.today().strftime('%Y-%m-%d'), 
-                release_date = None,
-                mawb = None,
-                hawb = None):
+
+    def __init__(self,
+                 client,
+                 width,
+                 length,
+                 height,
+                 gross_weight,
+                 purpose,
+                 on_hand_number=None,
+                 create_date=datetime.datetime.today().strftime('%Y-%m-%d'),
+                 release_date=None,
+                 mawb=None,
+                 hawb=None):
         self.client = client
         self.width = width
         self.length = length
@@ -32,34 +34,35 @@ class Shipment:
         return (
             f'''
             This shipment belongs to client: {self.client}
-            Dimensions: {self.width} x {self.length} x {self.height} 
+            Dimensions: {self.width} x {self.length} x {self.height}
             Gross Weight: {self.gross_weight} lbs
             On Hand Number: {self.on_hand_number}
             Purpose: {self.purpose}
             Created on: {self.create_date}
             Released on: {self.release_date}
             '''
-            ).lstrip()
+        ).lstrip()
 
     def volume_weight(self):
-        return str(round((self.width * self.length * self.height)/366, 1)) + " kg/vol"
+        return str(round((self.width * self.length * self.height) / 366, 1)) + " kg/vol"
 
     def lbs_to_kg(self):
-        return round(self.gross_weight/2.204)
+        return round(self.gross_weight / 2.204)
 
     def add_shipment(self):
         curs.execute('INSERT INTO shipments VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (
-            self.on_hand_number, self.client, self.width, self.length, 
+            self.on_hand_number, self.client, self.width, self.length,
             self.height, self.gross_weight, self.purpose,
             self.create_date, self.release_date, self.mawb, self.hawb))
         return conn.commit()
 
     def delete_shipment(self):
-        curs.execute('DELETE FROM shipments WHERE on_hand_number = ?',(
+        curs.execute('DELETE FROM shipments WHERE on_hand_number = ?', (
             self.on_hand_number,))
         return conn.commit()
 
-    def update_shipment(self, client, width, length, height, gross_weight, purpose):
+    def update_shipment(self, client, width, length,
+                        height, gross_weight, purpose):
         curs.execute(
             '''
             UPDATE shipments
@@ -71,7 +74,7 @@ class Shipment:
             purpose = ?
             WHERE on_hand_number = ?
             ''', (client, width, length, height, gross_weight, purpose,
-            self.on_hand_number))
+                  self.on_hand_number))
         return conn.commit()
 
     def release_shipment(self, MAWB, HAWB):
@@ -83,7 +86,7 @@ class Shipment:
             HAWB = ?
             WHERE on_hand_number = ?
             ''', (datetime.datetime.today().strftime('%Y-%m-%d'),
-             MAWB, HAWB, self.on_hand_number))
+                  MAWB, HAWB, self.on_hand_number))
         return conn.commit()
 
     def add_to_consolidation(self, MAWB, HAWB):
@@ -96,7 +99,8 @@ class Shipment:
             ''', (MAWB, HAWB, self.on_hand_number))
         return conn.commit()
 
-    def update_MAWB(self, MAWB, HAWB, unit_count, gross_weight, volume_weight, date):
+    def update_MAWB(self, MAWB, HAWB, unit_count,
+                    gross_weight, volume_weight, date):
         curs.execute(
             '''
             INSERT INTO consols VALUES ?, ?, ?, ?, ?, ?
@@ -104,9 +108,9 @@ class Shipment:
         return conn.commit()
 
     @staticmethod
-    def fetch_all_records(quantity = 50):
-        curs.execute('SELECT * FROM shipments ORDER BY create_date DESC LIMIT ?', 
-            (quantity,))
+    def fetch_all_records(quantity=50):
+        curs.execute('SELECT * FROM shipments ORDER BY create_date DESC LIMIT ?',
+                     (quantity,))
         return curs.fetchall()
 
     @staticmethod
@@ -117,14 +121,14 @@ class Shipment:
     @staticmethod
     def find_one_record(on_hand_number):
         curs.execute('SELECT * FROM shipments WHERE on_hand_number = ?',
-        (on_hand_number,))
+                     (on_hand_number,))
         param = curs.fetchall()[0]
         return Shipment(*param)
 
-    @staticmethod #decorator for export to csv?
+    @staticmethod  # decorator for export to csv?
     def fetch_all_records_in_date(first_date, second_date):
         curs.execute('SELECT * FROM shipments WHERE create_date BETWEEN ? AND ?',
-            (first_date, second_date))
+                     (first_date, second_date))
         return curs.fetchall()
 
     @staticmethod

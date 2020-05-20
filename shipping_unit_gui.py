@@ -274,13 +274,13 @@ def consolidation():
         for unit in result:
             shipping_unit = Shipment(*unit)
             shipping_unit.release_shipment(values['mawb'], values['hawb'])
-    #assign on-hands a MAWB number (or consol date),
-    #total weight and shipping unit count.
-    #send email to respective parties.
+    # assign on-hands a MAWB number (or consol date),
+    # total weight and shipping unit count.
+    # send email to respective parties.
 
 
 def report():
-    #need to flesh out, 
+    # need to flesh out, 
     layout = [
         [sg.CalendarButton('from date', key='from')],
         [sg.CalendarButton('to date', key='to')],
