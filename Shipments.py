@@ -1,5 +1,5 @@
 import datetime, sqlite3
-conn = sqlite3.connect('Shipping_Units (2).db')
+conn = sqlite3.connect('Shipping_Units.db')
 curs = conn.cursor()
 
 
@@ -122,13 +122,15 @@ class Shipment:
     def find_one_record(on_hand_number):
         curs.execute('SELECT * FROM shipments WHERE on_hand_number = ?',
                      (on_hand_number,))
-        param = curs.fetchall()[0]
+        param = curs.fetch()
         return Shipment(*param)
 
     @staticmethod  # decorator for export to csv?
     def fetch_all_records_in_date(first_date, second_date):
-        curs.execute('SELECT * FROM shipments WHERE create_date BETWEEN ? AND ?',
-                     (first_date, second_date))
+        curs.execute(
+                     'SELECT * FROM shipments WHERE create_date BETWEEN ? AND ?',
+                    (first_date, second_date)
+                )
         return curs.fetchall()
 
     @staticmethod
