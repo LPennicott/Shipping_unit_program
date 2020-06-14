@@ -1,5 +1,8 @@
-import datetime, sqlite3
-conn = sqlite3.connect('Shipping_Units.db')
+import datetime
+import sqlite3
+
+
+conn = sqlite3.connect('Shipping_Units (2).db')
 curs = conn.cursor()
 
 
@@ -41,19 +44,22 @@ class Shipment:
             Created on: {self.create_date}
             Released on: {self.release_date}
             '''
-        ).lstrip()
+        )
 
     def volume_weight(self):
-        return str(round((self.width * self.length * self.height) / 366, 1)) + " kg/vol"
+        return str(round(
+            (self.width * self.length * self.height) / 366, 1)) + " kg/vol"
 
     def lbs_to_kg(self):
         return round(self.gross_weight / 2.204)
 
     def add_shipment(self):
-        curs.execute('INSERT INTO shipments VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (
-            self.on_hand_number, self.client, self.width, self.length,
-            self.height, self.gross_weight, self.purpose,
-            self.create_date, self.release_date, self.mawb, self.hawb))
+        curs.execute(
+            'INSERT INTO shipments VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (
+                self.on_hand_number, self.client, self.width, self.length,
+                self.height, self.gross_weight, self.purpose,
+                self.create_date, self.release_date, self.mawb, self.hawb)
+        )
         return conn.commit()
 
     def delete_shipment(self):
@@ -109,8 +115,10 @@ class Shipment:
 
     @staticmethod
     def fetch_all_records(quantity=50):
-        curs.execute('SELECT * FROM shipments ORDER BY create_date DESC LIMIT ?',
-                     (quantity,))
+        curs.execute(
+            'SELECT * FROM shipments ORDER BY create_date DESC LIMIT ?',
+            (quantity,)
+        )
         return curs.fetchall()
 
     @staticmethod
@@ -128,9 +136,9 @@ class Shipment:
     @staticmethod  # decorator for export to csv?
     def fetch_all_records_in_date(first_date, second_date):
         curs.execute(
-                     'SELECT * FROM shipments WHERE create_date BETWEEN ? AND ?',
+            'SELECT * FROM shipments WHERE create_date BETWEEN ? AND ?',
                     (first_date, second_date)
-                )
+        )
         return curs.fetchall()
 
     @staticmethod

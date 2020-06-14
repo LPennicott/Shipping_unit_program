@@ -1,4 +1,7 @@
-import PySimpleGUI as sg, sys, csv, ezgmail
+import sys
+import csv
+import ezgmail
+import PySimpleGUI as sg
 from Shipments import Shipment
 
 
@@ -54,7 +57,8 @@ def view_shipments():
 
     sg.change_look_and_feel('DarkBlue')
 
-    layout = [[sg.Table(values=result,
+    layout = [[sg.Table(
+        values=result,
         headings=headings,
         key='table',
         auto_size_columns=True,
@@ -145,7 +149,7 @@ def update_a_shipment(onhand):
     sg.change_look_and_feel('DarkBlue')
 
     window = sg.Window(f'Update Shipment: {unit.on_hand_number}',
-                        layout, resizable=True)
+                       layout, resizable=True)
     event, values = window.read()
     window.close()
 
@@ -253,11 +257,12 @@ def consolidation():
 
     sg.change_look_and_feel('DarkBlue')
 
-    layout = [[sg.Table(values=result,
-                        headings=headings,
-                        key='table',
-                        auto_size_columns=True,
-                        alternating_row_color='gray')],
+    layout = [[sg.Table(
+        values=result,
+        headings=headings,
+        key='table',
+        auto_size_columns=True,
+        alternating_row_color='gray')],
         [sg.Text('Enter MAWB'), sg.InputText('MAWB', key='mawb')],
         [sg.Text('Enter HAWB'), sg.InputText('HAWB', key='hawb')],
         [sg.Cancel(), sg.Button('Consol', key='consol'),
@@ -280,7 +285,7 @@ def consolidation():
 
 
 def report():
-    # need to flesh out, 
+    # need to flesh out
     layout = [
         [sg.CalendarButton('from date', key='from')],
         [sg.CalendarButton('to date', key='to')],
