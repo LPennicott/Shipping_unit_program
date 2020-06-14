@@ -7,12 +7,10 @@ import shipping_unit_gui
 # another database table for MAWB consols
 
 layout = [
-    [
-        sg.Text('Shipping Unit Program!',
-        size=(30, 1), font=('Comic', 25))],
-       [sg.Text('Please select an option below or search for a shipment',
-        size=(30, 2), font=('Comic', 15))],
-       [sg.Text('Search with on-hand number', size=(25, 1)),
+    [sg.Text('Shipping Unit Program!', size=(30, 1), font=('Comic', 25))],
+    [sg.Text('Please select an option below or search for a shipment',
+             size=(30, 2), font=('Comic', 15))],
+    [sg.Text('Search with on-hand number', size=(25, 1)),
         sg.InputText(key='search on-hand')],
     [
         sg.Button('Add Shipment', key='save_new'),
@@ -41,7 +39,8 @@ elif event == 'search':
         shipping_unit_gui.lookup_a_shipment(values['search on-hand'])
     except:
         layout2 = [
-            [sg.Text('Shipping Unit not found! Click below to view shipments.')],
+            [sg.Text(
+                'Shipping Unit not found! Click below to view shipments.')],
             [sg.Submit()]
         ]
         sg.change_look_and_feel('DarkBlue')
